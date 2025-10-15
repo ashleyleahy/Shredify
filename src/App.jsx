@@ -4,10 +4,12 @@ export default function BetterTogetherApp() {
   // Load teams from localStorage if exists, otherwise default
   const [teams, setTeams] = useState(() => {
     const saved = localStorage.getItem("teams");
-    return saved ? JSON.parse(saved) : [
-      { name: "Team A", members: ["Ash"], totalLoss: 0 },
-      { name: "Team B", members: ["Jordan"], totalLoss: 0 }
-    ];
+    return saved
+      ? JSON.parse(saved)
+      : [
+          { name: "Team A", members: ["Ash"], totalLoss: 0 },
+          { name: "Team B", members: ["Jordan"], totalLoss: 0 }
+        ];
   });
 
   const [newWeight, setNewWeight] = useState("");
@@ -22,7 +24,7 @@ export default function BetterTogetherApp() {
     localStorage.setItem("teams", JSON.stringify(teams));
   }, [teams]);
 
-  // Add weight
+  // Add weekly weight loss
   const updateLoss = () => {
     const updatedTeams = [...teams];
     updatedTeams[selectedTeam].totalLoss += parseFloat(newWeight) || 0;
@@ -30,14 +32,14 @@ export default function BetterTogetherApp() {
     setNewWeight("");
   };
 
-  // Add team
+  // Add a new team
   const addTeam = () => {
     if (!newTeamName.trim()) return;
     setTeams([...teams, { name: newTeamName.trim(), members: [], totalLoss: 0 }]);
     setNewTeamName("");
   };
 
-  // Add member
+  // Add a new member
   const addMember = () => {
     if (!newMemberName.trim()) return;
     const updatedTeams = [...teams];
@@ -81,28 +83,65 @@ export default function BetterTogetherApp() {
         Better Together: Weight Loss Challenge
       </h1>
 
-      {/* Teams */}
+      {/* Teams Display */}
       <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
         {teams.map((team, teamIndex) => (
-          <div key={teamIndex} style={{ background: "white", padding: "1rem", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", width: "250px" }}>
+          <div
+            key={teamIndex}
+            style={{
+              background: "white",
+              padding: "1rem",
+              borderRadius: "12px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+              width: "250px"
+            }}
+          >
             <input
               type="text"
               value={team.name}
               onChange={(e) => editTeamName(teamIndex, e.target.value)}
               style={{ fontWeight: "600", fontSize: "1.2rem", width: "100%", marginBottom: "0.5rem" }}
             />
-            <button onClick={() => deleteTeam(teamIndex)} style={{ background: "#dc3545", color: "white", padding: "0.25rem 0.5rem", border: "none", borderRadius: "4px", marginBottom: "0.5rem", cursor: "pointer" }}>Delete Team</button>
+            <button
+              onClick={() => deleteTeam(teamIndex)}
+              style={{
+                background: "#dc3545",
+                color: "white",
+                padding: "0.25rem 0.5rem",
+                border: "none",
+                borderRadius: "4px",
+                marginBottom: "0.5rem",
+                cursor: "pointer"
+              }}
+            >
+              Delete Team
+            </button>
             <p style={{ color: "#555" }}>Members:</p>
             <ul style={{ listStyle: "none", padding: 0 }}>
               {team.members.map((member, memberIndex) => (
-                <li key={memberIndex} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.25rem" }}>
+                <li
+                  key={memberIndex}
+                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.25rem" }}
+                >
                   <input
                     type="text"
                     value={member}
                     onChange={(e) => editMemberName(teamIndex, memberIndex, e.target.value)}
                     style={{ flex: 1, marginRight: "0.25rem" }}
                   />
-                  <button onClick={() => deleteMember(teamIndex, memberIndex)} style={{ background: "#dc3545", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", padding: "0.25rem" }}>X</button>
+                  <button
+                    onClick={() => deleteMember(teamIndex, memberIndex)}
+                    style={{
+                      background: "#dc3545",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      padding: "0.25rem"
+                    }}
+                  >
+                    X
+                  </button>
                 </li>
               ))}
             </ul>
@@ -111,28 +150,16 @@ export default function BetterTogetherApp() {
         ))}
       </div>
 
-      {/* Add Weight */}
-      <div style={{ background: "white", padding: "1rem", marginTop: "2rem", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", maxWidth: "300px", margin: "2rem auto" }}>
-        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add Weekly Weight Loss</h3>
-        <select value={selectedTeam} onChange={(e) => setSelectedTeam(parseInt(e.target.value))} style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}>
-          {teams.map((team, index) => <option key={index} value={index}>{team.name}</option>)}
-        </select>
-        <input type="number" placeholder="Weight lost (kg)" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }} />
-        <button onClick={updateLoss} style={{ width: "100%", background: "#007bff", color: "white", padding: "0.5rem", border: "none", borderRadius: "6px", cursor: "pointer" }}>Update Team</button>
-      </div>
-
-      {/* Add New Team */}
-      <div style={{ background: "white", padding: "1rem", marginTop: "1rem", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", maxWidth: "300px", margin: "1rem auto" }}>
-        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add New Team</h3>
-        <input type="text" placeholder="Team Name" value={newTeamName} onChange={(e) => setNewTeamName(e.target.value)} style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }} />
-        <button onClick={addTeam} style={{ width: "100%", background: "#28a745", color: "white", padding: "0.5rem", border: "none", borderRadius: "6px", cursor: "pointer" }}>Add Team</button>
-      </div>
-
-      {/* Add New Member */}
-      <div style={{ background: "white", padding: "1rem", marginTop: "1rem", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", maxWidth: "300px", margin: "1rem auto" }}>
-        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add New Member</h3>
-        <select value={selectedTeamForMember} onChange={(e) => setSelectedTeamForMember(parseInt(e.target.value))} style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}>
-          {teams.map((team, index) => <option key={index} value={index}>{team.name}</option>)}
-        </select>
-        <input type="text" placeholder="Member Name" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }} />
-        <button onClick={addMember} style={{ width: "100%", background: "#ffc107", color: "white", padding: "0.5rem", border: "none
+      {/* Add Weekly Weight */}
+      <div
+        style={{
+          background: "white",
+          padding: "1rem",
+          marginTop: "2rem",
+          borderRadius: "12px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+          maxWidth: "300px",
+          margin: "2rem auto"
+        }}
+      >
+        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add Weekl
