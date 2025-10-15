@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function BetterTogetherApp() {
-  const [teams, setTeams] = useState([
-    { name: "Team A", members: ["Ash"], totalLoss: 0 },
-    { name: "Team B", members: ["Jordan"], totalLoss: 0 }
-  ]);
+  // Load teams from localStorage if exists, otherwise default
+  const [teams, setTeams] = useState(() => {
+    const saved = localStorage.getItem("teams");
+    return saved ? JSON.parse(saved) : [
+      { name: "Team A", members: ["Ash"], totalLoss: 0 },
+      { name: "Team B", members: ["Jordan"], totalLoss: 0 }
+    ];
+  });
 
   const [newWeight, setNewWeight] = useState("");
   const [selectedTeam, setSelectedTeam] = useState(0);
@@ -13,7 +17,12 @@ export default function BetterTogetherApp() {
   const [newMemberName, setNewMemberName] = useState("");
   const [selectedTeamForMember, setSelectedTeamForMember] = useState(0);
 
-  // Update weekly weight
+  // Save teams to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("teams", JSON.stringify(teams));
+  }, [teams]);
+
+  // Add weight
   const updateLoss = () => {
     const updatedTeams = [...teams];
     updatedTeams[selectedTeam].totalLoss += parseFloat(newWeight) || 0;
@@ -21,14 +30,14 @@ export default function BetterTogetherApp() {
     setNewWeight("");
   };
 
-  // Add new team
+  // Add team
   const addTeam = () => {
     if (!newTeamName.trim()) return;
     setTeams([...teams, { name: newTeamName.trim(), members: [], totalLoss: 0 }]);
     setNewTeamName("");
   };
 
-  // Add new member
+  // Add member
   const addMember = () => {
     if (!newMemberName.trim()) return;
     const updatedTeams = [...teams];
@@ -68,9 +77,11 @@ export default function BetterTogetherApp() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#f8f9fa", padding: "2rem", textAlign: "center" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "1rem" }}>Better Together: Weight Loss Challenge</h1>
+      <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "1rem" }}>
+        Better Together: Weight Loss Challenge
+      </h1>
 
-      {/* Teams Display */}
+      {/* Teams */}
       <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
         {teams.map((team, teamIndex) => (
           <div key={teamIndex} style={{ background: "white", padding: "1rem", borderRadius: "12px", boxShadow: "0 2px 6px rgba(0,0,0,0.1)", width: "250px" }}>
@@ -124,8 +135,4 @@ export default function BetterTogetherApp() {
           {teams.map((team, index) => <option key={index} value={index}>{team.name}</option>)}
         </select>
         <input type="text" placeholder="Member Name" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }} />
-        <button onClick={addMember} style={{ width: "100%", background: "#ffc107", color: "white", padding: "0.5rem", border: "none", borderRadius: "6px", cursor: "pointer" }}>Add Member</button>
-      </div>
-    </div>
-  );
-}
+        <button onClick={addMember} style={{ width: "100%", background: "#ffc107", color: "white", padding: "0.5rem", border: "none
