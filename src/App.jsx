@@ -162,4 +162,123 @@ export default function BetterTogetherApp() {
           margin: "2rem auto"
         }}
       >
-        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add Weekl
+        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add Weekly Weight Loss</h3>
+        <select
+          value={selectedTeam}
+          onChange={(e) => setSelectedTeam(parseInt(e.target.value))}
+          style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}
+        >
+          {teams.map((team, index) => (
+            <option key={index} value={index}>
+              {team.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type="number"
+          placeholder="Weight lost (kg)"
+          value={newWeight}
+          onChange={(e) => setNewWeight(e.target.value)}
+          style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}
+        />
+        <button
+          onClick={updateLoss}
+          style={{
+            width: "100%",
+            background: "#007bff",
+            color: "white",
+            padding: "0.5rem",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer"
+          }}
+        >
+          Update Team
+        </button>
+      </div>
+
+      {/* Add New Team */}
+      <div
+        style={{
+          background: "white",
+          padding: "1rem",
+          marginTop: "1rem",
+          borderRadius: "12px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+          maxWidth: "300px",
+          margin: "1rem auto"
+        }}
+      >
+        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add New Team</h3>
+        <input
+          type="text"
+          placeholder="Team Name"
+          value={newTeamName}
+          onChange={(e) => setNewTeamName(e.target.value)}
+          style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}
+        />
+        <button
+          onClick={addTeam}
+          style={{
+            width: "100%",
+            background: "#28a745",
+            color: "white",
+            padding: "0.5rem",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer"
+          }}
+        >
+          Add Team
+        </button>
+      </div>
+
+      {/* Add New Member */}
+      <div
+        style={{
+          background: "white",
+          padding: "1rem",
+          marginTop: "1rem",
+          borderRadius: "12px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+          maxWidth: "300px",
+          margin: "1rem auto"
+        }}
+      >
+        <h3 style={{ fontWeight: "600", marginBottom: "0.5rem" }}>Add New Member</h3>
+        <select
+          value={selectedTeamForMember}
+          onChange={(e) => setSelectedTeamForMember(parseInt(e.target.value))}
+          style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}
+        >
+          {teams.map((team, index) => (
+            <option key={index} value={index}>
+              {team.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          placeholder="Member Name"
+          value={newMemberName}
+          onChange={(e) => setNewMemberName(e.target.value)}
+          style={{ width: "100%", padding: "0.5rem", marginBottom: "0.5rem" }}
+        />
+        <button
+          onClick={addMember}
+          style={{
+            width: "100%",
+            background: "#ffc107",
+            color: "white",
+            padding: "0.5rem",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer"
+          }}
+        >
+          Add Member
+        </button>
+      </div>
+    </div>
+  );
+}
